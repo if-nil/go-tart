@@ -2,6 +2,7 @@ package tart
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"os/exec"
 	"reflect"
@@ -79,7 +80,7 @@ testClose = numpy.array(%s)
 testVolume = numpy.array(%s)
 testRand = numpy.array(%s)
 %s
-print(' '.join([str(p) for p in result]).replace('nan','0.0'))`,
+print(' '.join([str(p) for p in result]))`,
 		a2s(testOpen), a2s(testHigh), a2s(testLow), a2s(testClose), a2s(testVolume), a2s(testRand), talibCmd)
 
 	pyOut, err := exec.Command("python", "-c", pyProg).Output()
@@ -103,6 +104,19 @@ print(' '.join([str(p) for p in result]).replace('nan','0.0'))`,
 		pairs = append(pairs, fmt.Sprintf("[%v] %.9f (expected) vs. %.9f (actual)", i, expected[i], v))
 	}
 
+	magicNan := 2006010215.040501
+	for i, v := range expected {
+		if math.IsNaN(v) {
+			expected[i] = magicNan
+		}
+	}
+	if a, ok := actual.([]float64); ok {
+		for i, v := range a {
+			if math.IsNaN(v) {
+				a[i] = magicNan
+			}
+		}
+	}
 	assert.InDeltaSlicef(t, expected, actual, allowance, strings.Join(pairs, "\n"))
 }
 

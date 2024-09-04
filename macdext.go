@@ -1,5 +1,7 @@
 package tart
 
+import "math"
+
 // Refer to MACD.
 // This is a general version of MACD with moving average types
 // for fast, slow, and signal lines as paremters.
@@ -37,7 +39,7 @@ func (m *MacdExt) Update(v float64) (float64, float64, float64) {
 
 	if m.sz <= m.slowN-m.fastN {
 		// align the first valid result for fast & slow EMA
-		return 0, 0, 0
+		return math.NaN(), math.NaN(), math.NaN()
 	}
 
 	fast := m.fast.Update(v)
@@ -45,13 +47,13 @@ func (m *MacdExt) Update(v float64) (float64, float64, float64) {
 
 	if m.sz < m.slowN {
 		// wait until fast and slow EMAs are valid before populating signal EMA
-		return 0, 0, 0
+		return math.NaN(), math.NaN(), math.NaN()
 	}
 
 	sig := m.signal.Update(macd)
 
 	if m.sz < m.n {
-		return 0, 0, 0
+		return math.NaN(), math.NaN(), math.NaN()
 	}
 
 	return macd, sig, macd - sig
