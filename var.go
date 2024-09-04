@@ -1,5 +1,7 @@
 package tart
 
+import "math"
+
 // The term variance refers to a statistical measurement of the spread between
 // numbers in a data set. More specifically, variance measures how far each
 // number in the set is from the mean and thus from every other number in the
@@ -7,7 +9,8 @@ package tart
 // analysts and traders to determine volatility and market security. The square
 // root of the variance is the standard deviation (σ), which helps determine
 // the consistency of an investment’s returns over a period of time.
-//  https://www.investopedia.com/terms/v/variance.asp
+//
+//	https://www.investopedia.com/terms/v/variance.asp
 type Var struct {
 	n    int64
 	hist *CBuf
@@ -27,7 +30,7 @@ func (r *Var) Update(v float64) float64 {
 	r.sum += v - old
 
 	if r.hist.Size() < r.n {
-		return 0
+		return math.NaN()
 	}
 
 	mean := r.sum / float64(r.n)
@@ -55,7 +58,8 @@ func (r *Var) Valid() bool {
 // analysts and traders to determine volatility and market security. The square
 // root of the variance is the standard deviation (σ), which helps determine
 // the consistency of an investment’s returns over a period of time.
-//  https://www.investopedia.com/terms/v/variance.asp
+//
+//	https://www.investopedia.com/terms/v/variance.asp
 func VarArr(in []float64, n int64) []float64 {
 	out := make([]float64, len(in))
 
