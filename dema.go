@@ -1,5 +1,7 @@
 package tart
 
+import "math"
+
 // The Double Exponential Moving Average (DEMA) reduces the lag
 // of traditional EMAs, making it more responsive and better-suited
 // for short-term traders. DEMA was developed by Patrick Mulloy,
@@ -10,8 +12,9 @@ package tart
 // moving average that remains smooth, but stays closer to the
 // price bars than either the single- or double-smoothed
 // traditional EMA.
-//  https://school.stockcharts.com/doku.php?id=technical_indicators:dema
-//  https://www.investopedia.com/terms/d/double-exponential-moving-average.asp
+//
+//	https://school.stockcharts.com/doku.php?id=technical_indicators:dema
+//	https://www.investopedia.com/terms/d/double-exponential-moving-average.asp
 type Dema struct {
 	n    int64
 	ema1 *Ema
@@ -40,7 +43,7 @@ func (d *Dema) Update(v float64) float64 {
 		}
 	}
 
-	return 0
+	return math.NaN()
 }
 
 func (d *Dema) InitPeriod() int64 {
@@ -61,8 +64,9 @@ func (d *Dema) Valid() bool {
 // moving average that remains smooth, but stays closer to the
 // price bars than either the single- or double-smoothed
 // traditional EMA.
-//  https://school.stockcharts.com/doku.php?id=technical_indicators:dema
-//  https://www.investopedia.com/terms/d/double-exponential-moving-average.asp
+//
+//	https://school.stockcharts.com/doku.php?id=technical_indicators:dema
+//	https://www.investopedia.com/terms/d/double-exponential-moving-average.asp
 func DemaArr(in []float64, n int64) []float64 {
 	out := make([]float64, len(in))
 
